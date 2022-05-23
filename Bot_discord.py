@@ -60,6 +60,11 @@ async def leave(ctx):
         await ctx.send("i am not in a voice channel")
 
 
+@client.command()
+async def cry(ctx, user):
+    await ctx.send(user, file=discord.File(r'assets/Video/cry.mp4'))
+
+
 @client.event
 async def on_ready():
     print('Bot is ready.')
