@@ -1,3 +1,6 @@
+from locale import currency
+
+
 class Node :
     def __init__(self,question,keyword):
         self.question = question
@@ -10,4 +13,18 @@ class Node :
         elif len(self.list_child_node) > 0:
             for child_node in self.list_child_node:
                 child_node.insert_node(Node, question)
+
+    # def get_current_node(self, keyword):
+    #     if self.keyword == keyword:
+    #         current_node = self.question
+    #         return current_node
+    #     elif len(self.list_child_node) > 0:
+    #         for child_node in self.list_child_node:
+    #             if child_node.keyword == keyword:
+    #                 current_node = child_node.question
+    #                 return current_node
+                    
+                    
+
+
 
