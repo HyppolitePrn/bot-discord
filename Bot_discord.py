@@ -5,8 +5,8 @@ from http import client
 import random
 import discord
 from discord.ext import commands
+from Node import Node
 client = discord.Client()
-
 # Faire le bot
 client = commands.Bot(command_prefix='-')
 
@@ -22,10 +22,17 @@ def kwa(sentence):
         return el.contents[0].endswith("kwa\\")
 
 
+first_node = Node("Comment puis je vous aider ?","help",
+[Node("Sur quel sujet ?","cours",[]),Node("Sur quel domaine?","fichier",[])])
+
+
 @client.command()
 async def ping(ctx):
     await ctx.send(f'Pong ! {round(client.latency * 1000)}ms')
 
+# @client.command()
+# async def aide(ctx):
+#     await ctx.send(first_node)
 
 @client.command()
 async def nerd(ctx, arg):
@@ -78,21 +85,25 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.author.id == 263324664275795968:
-        ale = random.randint(0, 20)
-        if ale == 10:
-            await message.channel.send("Youta parle quand t'aura des cheveux...")
+    match message.author.id:
+        case 263324664275795968:
+            ale = random.randint(0, 20)
+            if ale == 10:
+                await message.channel.send("Youta parle quand t'aura des cheveux...")
 
-    if message.author.id == 296334984195735554:
-        await message.add_reaction("😐")
+        case 257186882365030400:
+            await message.add_reaction("😐")
+        
+        case 246701574506676224:
+            await message.add_reaction("🥶")
+        
+        case 263324664275795968, 501018096723558412:
+            ale = random.randint(0, 5)
+            if ale == 1:
+                await message.add_reaction("💩")
 
-    if message.author.id == 246701574506676224:
-        await message.add_reaction("🥶")
-
-    if message.author.id == 263324664275795968 or message.author.id == 501018096723558412:
-        ale = random.randint(0, 5)
-        if ale == 1:
-            await message.add_reaction("💩")
+    if first_node.keyword in message.content:
+        await message.channel.send(first_node.question)
 
     if kwa(message.content):
         await message.channel.send(file=discord.File(r'assets/Video/FEUR_intro_3D.mp4'))
