@@ -1,5 +1,6 @@
 import re
 import requests
+import youtube_dl
 from bs4 import BeautifulSoup
 from http import client
 import random
@@ -45,6 +46,15 @@ async def nerd(ctx):
 
 
 @client.command()
+async def depression(ctx):
+    ref = ctx.message.reference
+    if ref is None:
+        return await ctx.reply("Tu n'a répondu a personne")
+    await ctx.message.delete()
+    await ref.resolved.reply(file=discord.File(r'assets/Video/fuckkkk.mp4'))
+
+
+@client.command()
 async def ratio(ctx):
     ref = ctx.message.reference
     if ref is None:
@@ -64,9 +74,20 @@ async def reu(ctx):
 
 @client.command(pass_context=True)
 async def join(ctx):
+    predefUrl = 'https://www.youtube.com/watch?v=Qu84tcGExSQ'
     if (ctx.author.voice):
         channel = ctx.message.author.voice.channel
         await channel.connect()
+        player = ctx.voice_client
+        FFMPEG_OPTIONS = {
+            'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+            'options': '-vn'}
+        YDL_OPTIONS = {'format': "bestaudio"}
+        with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
+            info = ydl.extract_info(predefUrl, download=False)
+            url2 = info['formats'][0]['url']
+            source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
+            player.play(source)
     else:
         await ctx.send("You are not in a voice channel, you must be in a voice channel to run this command")
 
@@ -81,7 +102,7 @@ async def leave(ctx):
 
 
 @client.command()
-async def cry(ctx, user):
+async def cry(ctx):
     ref = ctx.message.reference
     if ref is None:
         return await ctx.reply("Tu n'a répondu a personne")
@@ -90,7 +111,7 @@ async def cry(ctx, user):
 
 
 @client.command()
-async def bully(ctx, user):
+async def bully(ctx):
     ref = ctx.message.reference
     if ref is None:
         return await ctx.reply("Tu n'a répondu a personne")
@@ -99,7 +120,7 @@ async def bully(ctx, user):
 
 
 @client.command()
-async def laught(ctx, user):
+async def laught(ctx):
     ref = ctx.message.reference
     if ref is None:
         return await ctx.reply("Tu n'a répondu a personne")
@@ -108,7 +129,7 @@ async def laught(ctx, user):
 
 
 @client.command()
-async def puceau(ctx, user):
+async def puceau(ctx):
     ref = ctx.message.reference
     if ref is None:
         return await ctx.reply("Tu n'a répondu a personne")
@@ -135,7 +156,7 @@ async def on_message(message):
             if ale == 10:
                 await message.channel.send("Youta parle quand t'aura des cheveux...")
 
-        case 257186882365030400:
+        case 296334984195735554:
             await message.add_reaction("😐")
 
         case 246701574506676224:
@@ -146,11 +167,16 @@ async def on_message(message):
             if ale == 1:
                 await message.add_reaction("💩")
 
+        case 336588203417010176:
+            await message.add_reaction("🇹")
+            await message.add_reaction("🇬")
+            await message.add_reaction("💩")
+
     if first_node.keyword in message.content:
         await message.channel.send(first_node.question)
 
     if kwa(message.content):
-        # await message.channel.send(file=discord.File(r'assets/Video/FEUR_intro_3D.mp4'))
+        await message.channel.send(file=discord.File(r'assets/Video/FEUR_intro_3D.mp4'))
         await message.add_reaction("🇫")
         await message.add_reaction("🇪")
         await message.add_reaction("🇺")
