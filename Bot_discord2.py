@@ -33,7 +33,6 @@ def get_current_node(current_node, keyword):
 
 def get_current_node_2(current_node, keyword):
     for Node in current_node.list_child_node:
-
         if keyword == Node.keyword:
             current_node = Node.question
             return current_node

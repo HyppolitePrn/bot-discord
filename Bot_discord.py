@@ -22,8 +22,8 @@ def kwa(sentence):
         return el.contents[0].endswith("kwa\\")
 
 
-first_node = Node("Comment puis je vous aider ?","help",
-[Node("Sur quel sujet ?","cours",[]),Node("Sur quel domaine?","fichier",[])])
+first_node = Node("Comment puis je vous aider ?", "help",
+                  [Node("Sur quel sujet ?", "cours", []), Node("Sur quel domaine?", "fichier", [])])
 
 
 @client.command()
@@ -34,19 +34,32 @@ async def ping(ctx):
 # async def aide(ctx):
 #     await ctx.send(first_node)
 
+
 @client.command()
-async def nerd(ctx, arg):
-    await ctx.send(arg, file=discord.File(r'assets/Video/cringos.mp4'))
+async def nerd(ctx):
+    ref = ctx.message.reference
+    if ref is None:
+        return await ctx.reply("Tu n'a répondu a personne")
+    await ctx.message.delete()
+    await ref.resolved.reply(file=discord.File(r'assets/Video/cringos.mp4'))
 
 
 @client.command()
-async def ratio(ctx, user):
-    await ctx.send(user, file=discord.File(r'assets/Video/L+ratio.mp4'))
+async def ratio(ctx):
+    ref = ctx.message.reference
+    if ref is None:
+        return await ctx.reply("Tu n'a répondu a personne")
+    await ctx.message.delete()
+    await ref.resolved.reply(file=discord.File(r'assets/Video/L+ratio.mp4'))
 
 
 @client.command()
 async def reu(ctx):
-    await ctx.send(file=discord.File(r'assets/Video/rompish.mp4'))
+    ref = ctx.message.reference
+    if ref is None:
+        return await ctx.reply("Tu n'a répondu a personne")
+    await ctx.message.delete()
+    await ref.resolved.reply(file=discord.File(r'assets/Video/rompish.mp4'))
 
 
 @client.command(pass_context=True)
@@ -69,7 +82,38 @@ async def leave(ctx):
 
 @client.command()
 async def cry(ctx, user):
-    await ctx.send(user, file=discord.File(r'assets/Video/cry.mp4'))
+    ref = ctx.message.reference
+    if ref is None:
+        return await ctx.reply("Tu n'a répondu a personne")
+    await ctx.message.delete()
+    await ref.resolved.reply(file=discord.File(r'assets/Video/cry.mp4'))
+
+
+@client.command()
+async def bully(ctx, user):
+    ref = ctx.message.reference
+    if ref is None:
+        return await ctx.reply("Tu n'a répondu a personne")
+    await ctx.message.delete()
+    await ref.resolved.reply(file=discord.File(r'assets/Video/Allo_Mc_Fly_online-video-cutter.com.mp4'))
+
+
+@client.command()
+async def laught(ctx, user):
+    ref = ctx.message.reference
+    if ref is None:
+        return await ctx.reply("Tu n'a répondu a personne")
+    await ctx.message.delete()
+    await ref.resolved.reply(file=discord.File(r'assets/Video/ahahahaha.mov'))
+
+
+@client.command()
+async def puceau(ctx, user):
+    ref = ctx.message.reference
+    if ref is None:
+        return await ctx.reply("Tu n'a répondu a personne")
+    await ctx.message.delete()
+    await ref.resolved.reply(file=discord.File(r'assets/Video/Ferme_la_puceau_de_merde.mp4'))
 
 
 @client.event
@@ -93,10 +137,10 @@ async def on_message(message):
 
         case 257186882365030400:
             await message.add_reaction("😐")
-        
+
         case 246701574506676224:
             await message.add_reaction("🥶")
-        
+
         case 263324664275795968, 501018096723558412:
             ale = random.randint(0, 5)
             if ale == 1:
@@ -106,7 +150,7 @@ async def on_message(message):
         await message.channel.send(first_node.question)
 
     if kwa(message.content):
-        await message.channel.send(file=discord.File(r'assets/Video/FEUR_intro_3D.mp4'))
+        # await message.channel.send(file=discord.File(r'assets/Video/FEUR_intro_3D.mp4'))
         await message.add_reaction("🇫")
         await message.add_reaction("🇪")
         await message.add_reaction("🇺")
