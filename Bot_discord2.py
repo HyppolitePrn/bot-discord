@@ -34,37 +34,7 @@ root.insert_node(Node("Voici la documentation de PHP : https://www.php.net/manua
                  "php"), "De quel language voulez-vous la documentation ?")
 
 
-def get_current_node(current_node, keyword):
-    print(current_node.question)
-
-    for Node in current_node.list_child_node:
-        if keyword == Node.keyword:
-            current_node = Node.question
-            return current_node
-
-        else:
-            if len(Node.list_child_node) > 0:
-                return get_current_node(Node, keyword)
-
-
-def get_current_node_2(current_node, keyword):
-    for Node in current_node.list_child_node:
-
-        if keyword == Node.keyword:
-            current_node = Node.question
-            return current_node
-        else:
-            for Node in Node.list_child_node:
-                if len(Node.list_child_node) > 0:
-                    print(Node.question, 'dans le else')
-                    match = get_current_node_2(Node, keyword)
-                    print(match, 'match')
-                    if match:
-                        return match
-
-
 def get_enfant_direct(current_node, keyword):
-    print(len(current_node.list_child_node))
     if len(current_node.list_child_node) > 0:
         for Node in current_node.list_child_node:
             if keyword == Node.keyword:

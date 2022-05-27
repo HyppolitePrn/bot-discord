@@ -1,3 +1,4 @@
+from glob import glob
 import os
 from Node import Node
 from discord.ext import commands
@@ -11,6 +12,7 @@ import re
 import time
 import asyncio
 from dotenv import load_dotenv
+import Bot_discord2
 load_dotenv()
 
 client = discord.Client()
@@ -18,6 +20,16 @@ client = discord.Client()
 client = commands.Bot(command_prefix='-')
 
 token = os.getenv('TOKEN')
+
+current_node = None
+last_note = None
+
+
+@client.command()
+async def aide(ctx):
+    global current_node
+    current_node = Bot_discord2.root
+    await ctx.send(current_node.question)
 
 
 def kwa(sentence):
@@ -38,10 +50,6 @@ first_node = Node("Comment puis je vous aider ?", "help",
 @client.command()
 async def ping(ctx):
     await ctx.send(f'Pong ! {round(client.latency * 1000)}ms')
-
-# @client.command()
-# async def aide(ctx):
-#     await ctx.send(first_node)
 
 
 @client.command()
@@ -170,6 +178,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    global current_node
+    global last_node
     await client.process_commands(message)
     message.content = message.content.lower()
 
@@ -198,8 +208,27 @@ async def on_message(message):
         #     await message.add_reaction("🇬")
         #     await message.add_reaction("💩")
 
-    if first_node.keyword in message.content:
-        await message.channel.send(first_node.question)
+    if isinstance(message.channel, discord.channel.DMChannel) and message.author != client.user and current_node != None:
+        message.content = message.content.lower()
+        phrase = message.content.split()
+
+        for word in phrase:
+
+            if Bot_discord2.get_enfant_direct(current_node, word) != None:
+                test = Bot_discord2.get_enfant_direct(current_node, word)
+                last_node = current_node
+                current_node = test
+                await message.channel.send(current_node.question)
+            elif word == 'back' and last_node != None:
+                current_node = last_node
+                await message.channel.send("Ok i go back to the previous question")
+            elif word == 'reset':
+                current_node = Bot_discord2.root
+                await message.channel.send("The discussion has succefully been reset")
+            elif word == 'quit':
+                current_node = None
+                await message.channel.send('A plus !')
+                return
 
     if kwa(message.content):
         await message.channel.send(file=discord.File(r'assets/Video/FEUR_intro_3D.mp4'))
