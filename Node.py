@@ -1,15 +1,12 @@
-class Node :
-    def __init__(self,question,keyword,list_child_node):
+class Node:
+    def __init__(self, question, keyword):
         self.question = question
         self.keyword = keyword
-        self.list_child_node = list_child_node
+        self.list_child_node = []
 
-    def user_response(self, txt):
-        print(self.question)
-        # txt = input()
-        for child in self.list_child_node:
-            if child.keyword in txt:
-                child.user_response()
-
-first_node =Node("Comment puis je vous aider ?","help",
-[Node("Sur quel sujet ?","cours",[]),Node("Sur quel domaine?","fichier",[])])
+    def insert_node(self, Node, question):
+        if self.question == question:
+            self.list_child_node.append(Node)
+        elif len(self.list_child_node) > 0:
+            for child_node in self.list_child_node:
+                child_node.insert_node(Node, question)

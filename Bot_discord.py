@@ -12,7 +12,7 @@ import re
 import time
 import asyncio
 from dotenv import load_dotenv
-import Bot_discord2
+import Tree
 load_dotenv()
 
 client = discord.Client()
@@ -28,7 +28,7 @@ last_note = None
 @client.command()
 async def aide(ctx):
     global current_node
-    current_node = Bot_discord2.root
+    current_node = Tree.root
     await ctx.send(current_node.question)
 
 
@@ -41,10 +41,6 @@ def kwa(sentence):
         return False
     else:
         return el.contents[0].endswith("kwa\\")
-
-
-first_node = Node("Comment puis je vous aider ?", "help",
-                  [Node("Sur quel sujet ?", "cours", []), Node("Sur quel domaine?", "fichier", [])])
 
 
 @client.command()
@@ -214,8 +210,8 @@ async def on_message(message):
 
         for word in phrase:
 
-            if Bot_discord2.get_enfant_direct(current_node, word) != None:
-                test = Bot_discord2.get_enfant_direct(current_node, word)
+            if Tree.get_enfant_direct(current_node, word) != None:
+                test = Tree.get_enfant_direct(current_node, word)
                 last_node = current_node
                 current_node = test
                 await message.channel.send(current_node.question)
@@ -223,7 +219,7 @@ async def on_message(message):
                 current_node = last_node
                 await message.channel.send("Ok i go back to the previous question")
             elif word == 'reset':
-                current_node = Bot_discord2.root
+                current_node = Tree.root
                 await message.channel.send("The discussion has succefully been reset")
             elif word == 'quit':
                 current_node = None

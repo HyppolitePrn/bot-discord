@@ -1,6 +1,6 @@
 from calendar import c
 from threading import currentThread
-from Bot_discord3 import Node
+from Node import Node
 
 root = Node("Comment puis-je vous aider ?", "help")
 
