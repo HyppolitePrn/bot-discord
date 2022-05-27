@@ -1,15 +1,23 @@
-import re
-import requests
-import youtube_dl
-from bs4 import BeautifulSoup
-from http import client
-import random
-import discord
-from discord.ext import commands
+import os
 from Node import Node
+from discord.ext import commands
+import discord
+import random
+from http import client
+from bs4 import BeautifulSoup
+import youtube_dl
+import requests
+import re
+import time
+import asyncio
+from dotenv import load_dotenv
+load_dotenv()
+
 client = discord.Client()
 # Faire le bot
 client = commands.Bot(command_prefix='-')
+
+token = os.getenv('TOKEN')
 
 
 def kwa(sentence):
@@ -129,6 +137,24 @@ async def laught(ctx):
 
 
 @client.command()
+async def monkey(ctx):
+    em = discord.Embed(
+        name=f'MONKEY')
+    em.set_image(
+        url='https://c.tenor.com/d8Nj1CVSRbQAAAAd/monki-flips-dies.gif')
+    await ctx.send(embed=em)
+
+
+@client.command()
+async def waitwhat(ctx):
+    em = discord.Embed(
+        name=f'WAIT WHAT ?')
+    em.set_image(
+        url='https://c.tenor.com/k_63-OnPklsAAAAC/didsomeonesaycock-didsomeonesay.gif')
+    await ctx.send(embed=em)
+
+
+@client.command()
 async def puceau(ctx):
     ref = ctx.message.reference
     if ref is None:
@@ -167,10 +193,10 @@ async def on_message(message):
             if ale == 1:
                 await message.add_reaction("💩")
 
-        case 336588203417010176:
-            await message.add_reaction("🇹")
-            await message.add_reaction("🇬")
-            await message.add_reaction("💩")
+        # case 336588203417010176:
+        #     await message.add_reaction("🇹")
+        #     await message.add_reaction("🇬")
+        #     await message.add_reaction("💩")
 
     if first_node.keyword in message.content:
         await message.channel.send(first_node.question)
@@ -185,4 +211,34 @@ async def on_message(message):
     # if message.content == "del":
     #     await message.channel.purge(limit=3)
 
-client.run('OTc4MjI5MjYzNjI0OTk0ODM2.GcraNv.g5Wq-osWlt0pH4Via0-SqrRQlYNDvib61OtygI')
+
+snipe_message_author = {}
+snipe_message_content = {}
+
+
+@client.event
+async def on_message_delete(message):
+    snipe_message_content[message.channel.id,
+                          message.author.id] = message.content
+    snipe_message_author[message.channel.id,
+                         message.author.id] = message.author
+    await asyncio.sleep(60)
+    del snipe_message_author[message.channel.id]
+    del snipe_message_content[message.channel.id]
+
+
+@client.command(name='snipe')
+async def snipe(ctx, user: discord.User):
+    channel = ctx.channel
+
+    try:
+        em = discord.Embed(
+            title=f'dernier message supp dans {channel.name}', description=snipe_message_content[channel.id, user.id])
+        em.set_footer(
+            text=f"This message was sent by {snipe_message_author[channel.id, user.id]}")
+        await ctx.send(embed=em)
+
+    except KeyError:
+        await ctx.send(f'oh pelo ya pas de message récement sup dans ce channel **{channel.name}**')
+
+client.run(token)
