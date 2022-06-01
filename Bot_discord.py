@@ -15,6 +15,47 @@ from dotenv import load_dotenv
 import Tree
 load_dotenv()
 
+commands_bot = """# Comment utiliser le Bot ?
+
+```
+command_prefix='-'
+```
+
+## Commands
+
+
+```
+-aide
+```
+Lance une discussion avec le Bot qui vous donnera sois la doc soit une playlist de tuto sur l'un des langages que vous voulez entre JS,PY,HTML,CSS et PHP.
+
+```
+-ping
+```
+Montre la latence du bot.
+
+```
+-nerd
+-depression
+-ratio
+-reu
+-cry
+-bully
+-laught
+-puceau
+```
+Répondre à un message avec ces commandes enverra une vidéo en réponse à la personne ciblée et supprimera toute trace de votre commande pour plus de fun !
+
+```
+-monkey
+```
+Cette commande envoie un gif monkey flip dans un embed.
+
+```
+-waitwhat
+```
+Cette commande envoie un gif pepe wait ! what ?"""
+
 client = discord.Client()
 # Faire le bot
 client = commands.Bot(command_prefix='-')
@@ -73,6 +114,11 @@ async def ratio(ctx):
         return await ctx.reply("Tu n'a répondu a personne")
     await ctx.message.delete()
     await ref.resolved.reply(file=discord.File(r'assets/Video/L+ratio.mp4'))
+
+
+@client.command()
+async def commands(ctx):
+    await ctx.send(commands_bot)
 
 
 @client.command()
@@ -165,6 +211,23 @@ async def puceau(ctx):
         return await ctx.reply("Tu n'a répondu a personne")
     await ctx.message.delete()
     await ref.resolved.reply(file=discord.File(r'assets/Video/Ferme_la_puceau_de_merde.mp4'))
+
+admins_server = {}
+
+
+@client.command()
+async def setAdmin(ctx, arg):
+    server_id = ctx.guild.id
+    if admins_server[server_id]:
+        admins_server[server_id] = arg
+    else:
+        del admins_server[server_id]
+        admins_server[server_id] = arg
+
+
+@client.command()
+async def admin(ctx):
+    await ctx.send(f"<@&{981512544197967982}> {ctx.author.server.name} a besoin d'aide")
 
 
 @client.event
