@@ -129,7 +129,7 @@ async def reu(ctx):
     await ctx.message.delete()
     await ref.resolved.reply(file=discord.File(r'assets/Video/rompish.mp4'))
 
-
+# --------------------------------------------------------------------------
 @client.command(pass_context=True)
 async def join(ctx):
     predefUrl = 'https://www.youtube.com/watch?v=Qu84tcGExSQ'
@@ -158,6 +158,36 @@ async def leave(ctx):
     else:
         await ctx.send("i am not in a voice channel")
 
+@client.command(pass_context=True)
+async def pause(ctx):
+    ctx.voice_client.pause()
+    await ctx.send("J'fais une pause le sang!") 
+
+@client.command(pass_context=True)
+async def resume(ctx):
+    ctx.voice_client.resume()
+    await ctx.send("Et zé reparti!")
+
+@client.command(pass_context=True)
+async def play(ctx,url):
+    try:
+        player = ctx.voice_client
+        if (player):
+            player.stop()
+            FFMPEG_OPTIONS = {
+                'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+                'options':'-vn'}
+            YDL_OPTIONS = {'format':"bestaudio"}
+
+            with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
+                info = ydl.extract_info(url, download=False)
+                url2 = info['formats'][0]['url']
+                source = await discord.FFmpegOpusAudio.from_probe(url2,**FFMPEG_OPTIONS)
+                player.play(source)
+    except:
+        await ctx.send("Je peut pas lire ça le sang")
+
+# --------------------------------------------------------------------------
 
 @client.command()
 async def cry(ctx):
