@@ -54,7 +54,36 @@ Cette commande envoie un gif monkey flip dans un embed.
 ```
 -waitwhat
 ```
-Cette commande envoie un gif pepe wait ! what ?"""
+Cette commande envoie un gif pepe wait ! what ?
+
+```
+-snipe
+```
+Permet de voir le dernier message supprimer par la personne mentionnée.
+```
+-join
+```
+Permet au bot de join le vocal dans lequel se trouver l'utilisateur.
+```
+-play
+```
+Permet de jouer des vidéos Youtube dans un vocal.
+```
+-pause
+```
+Permet de mettre en pause la vidéo jouer par le bot.
+```
+-resume
+```
+Permet d'enlever le mode pause de la vidéos joué par le bot.
+```
+-setAdmin 
+```
+Permet de définir le rôle des admins du server grâce à l'id du rôle.
+```
+-admin
+```
+Permet d'appeler des admins en cas de besoin d'aides."""
 
 client = discord.Client()
 # Faire le bot
@@ -129,7 +158,7 @@ async def reu(ctx):
     await ctx.message.delete()
     await ref.resolved.reply(file=discord.File(r'assets/Video/rompish.mp4'))
 
-# --------------------------------------------------------------------------
+
 @client.command(pass_context=True)
 async def join(ctx):
     predefUrl = 'https://www.youtube.com/watch?v=Qu84tcGExSQ'
@@ -158,36 +187,38 @@ async def leave(ctx):
     else:
         await ctx.send("i am not in a voice channel")
 
+
 @client.command(pass_context=True)
 async def pause(ctx):
     ctx.voice_client.pause()
-    await ctx.send("J'fais une pause le sang!") 
+    await ctx.send("J'fais une pause le sang!")
+
 
 @client.command(pass_context=True)
 async def resume(ctx):
     ctx.voice_client.resume()
     await ctx.send("Et zé reparti!")
 
+
 @client.command(pass_context=True)
-async def play(ctx,url):
+async def play(ctx, url):
     try:
         player = ctx.voice_client
         if (player):
             player.stop()
             FFMPEG_OPTIONS = {
                 'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
-                'options':'-vn'}
-            YDL_OPTIONS = {'format':"bestaudio"}
+                'options': '-vn'}
+            YDL_OPTIONS = {'format': "bestaudio"}
 
             with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
                 info = ydl.extract_info(url, download=False)
                 url2 = info['formats'][0]['url']
-                source = await discord.FFmpegOpusAudio.from_probe(url2,**FFMPEG_OPTIONS)
+                source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
                 player.play(source)
     except:
         await ctx.send("Je peut pas lire ça le sang")
 
-# --------------------------------------------------------------------------
 
 @client.command()
 async def cry(ctx):
@@ -242,23 +273,6 @@ async def puceau(ctx):
     await ctx.message.delete()
     await ref.resolved.reply(file=discord.File(r'assets/Video/Ferme_la_puceau_de_merde.mp4'))
 
-admins_server = {}
-
-
-@client.command()
-async def setAdmin(ctx, arg):
-    server_id = ctx.guild.id
-    if admins_server[server_id]:
-        admins_server[server_id] = arg
-    else:
-        del admins_server[server_id]
-        admins_server[server_id] = arg
-
-
-@client.command()
-async def admin(ctx):
-    await ctx.send(f"<@&{981512544197967982}> {ctx.author.server.name} a besoin d'aide")
-
 
 @client.event
 async def on_ready():
@@ -297,7 +311,7 @@ async def on_message(message):
         #     await message.add_reaction("🇬")
         #     await message.add_reaction("💩")
 
-    if isinstance(message.channel, discord.channel.DMChannel) and message.author != client.user and current_node != None:
+    if message.channel.id == 981576359300202568 and message.author != client.user and current_node != None:
         message.content = message.content.lower()
         phrase = message.content.split()
 
@@ -358,5 +372,20 @@ async def snipe(ctx, user: discord.User):
 
     except KeyError:
         await ctx.send(f'oh pelo ya pas de message récement sup dans ce channel **{channel.name}**')
+
+admins_server = {}
+
+
+@client.command()
+async def setAdmin(ctx, arg):
+    server_id = ctx.guild.id
+    admins_server[server_id] = arg
+    print(admins_server)
+
+
+@client.command()
+async def admin(ctx):
+    await ctx.send(f"<@&{admins_server[ctx.guild.id]}> {ctx.author.name} a besoin d'aide")
+
 
 client.run(token)

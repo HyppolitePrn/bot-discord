@@ -38,3 +38,32 @@ Cette commande envoie un gif monkey flip dans un embed.
 -waitwhat
 ```
 Cette commande envoie un gif pepe wait ! what ?
+
+```
+-snipe
+```
+Permet de voir le dernier message supprimer par la personne mentionnée.
+```
+-join
+```
+Permet au bot de join le vocal dans lequel se trouver l'utilisateur.
+```
+-play
+```
+Permet de jouer des vidéos Youtube dans un vocal.
+```
+-pause
+```
+Permet de mettre en pause la vidéo jouer par le bot.
+```
+-resume
+```
+Permet d'enlever le mode pause de la vidéos joué par le bot.
+```
+-setAdmin 
+```
+Permet de définir le rôle des admins du server grâce à l'id du rôle.
+```
+-admin
+```
+Permet d'appeler des admins en cas de besoin d'aides.
